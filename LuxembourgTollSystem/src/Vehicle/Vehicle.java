@@ -4,14 +4,14 @@ import Map.Road;
 
 public class Vehicle {
 
-	private Road onRoad;
-	private double maxSpeed;
-	private double currentSpeed;
-	private String plate;
-	
-	public Vehicle(double max,double curr,String plate){
+	private Road 		onRoad;
+	private double 	maxSpeed;
+	private double 	currentSpeed;
+	private String 	plate;
+
+	public Vehicle(double max, double curr, String plate) {
 		this.maxSpeed = max;
-		this.setCurrentSpeed(curr);
+		this.currentSpeed = curr;
 		this.plate = plate;
 	}
 
@@ -22,23 +22,21 @@ public class Vehicle {
 	public void setOnRoad(Road onRoad) {
 		this.onRoad = onRoad;
 	}
-	
-	public double getMaxSpeed(){
+
+	public double getMaxSpeed() {
 		return this.maxSpeed;
 	}
 
 	public double getCurrentSpeed() {
 		return this.currentSpeed;
 	}
-	
+
 	public void setCurrentSpeed(double currentSpeed) {
 		this.currentSpeed = currentSpeed;
 	}
-	
-	public String getPlate(){
+
+	public String getPlate() {
 		return this.plate;
 	}
-	
-	
-	
+
 }

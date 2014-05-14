@@ -5,7 +5,7 @@ import Vehicle.Vehicle;
 
 public class Checkpoint {
 	
-	private int id;
+	private int 				id;
 	private Coordinates coordinates;
 	
 	public Checkpoint(double x,double y){
@@ -23,7 +23,12 @@ public class Checkpoint {
 	
 	//TODO
 	public void handleVehicle(Vehicle vehicle){
-		
+		/**
+		 * delete veh from old road
+		 * add veh to new road
+		 * change onRoad in veh
+		 * add Toll
+		 */
 	}
 	
 }

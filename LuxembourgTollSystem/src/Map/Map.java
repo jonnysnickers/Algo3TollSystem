@@ -7,7 +7,7 @@ import Vehicle.Vehicle;
 
 public class Map {
 
-	private Vector<Checkpoint> checkpoints;
-	private Vector<Road> roads;
-	private Vector<Vehicle> vehicles;
+	private Vector<Checkpoint> 	checkpoints;
+	private Vector<Road> 				roads;
+	private Vector<Vehicle> 		vehicles;
 }

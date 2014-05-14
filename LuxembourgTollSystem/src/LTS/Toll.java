@@ -6,10 +6,10 @@ import Map.Road;
 
 public class Toll {
 	
-	Road road;
-	double gold;
-	String plate;
-	Date date;
+	Road 		road;
+	double 	gold;
+	String 	plate;
+	Date 		date;
 	
 	Toll(Road road,String plate){
 		this.road = road;
