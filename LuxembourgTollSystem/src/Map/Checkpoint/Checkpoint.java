@@ -1,17 +1,22 @@
 package Map.Checkpoint;
 
+import java.util.ArrayList;
+
 import Map.Coordinates;
+import Map.Road;
 import Vehicle.Vehicle;
 
-//TODO lista krawedzi
 public class Checkpoint {
 	
 	private int 				id;
-	private Coordinates coordinates;
+	private boolean				endNode;
+	private Coordinates 		coordinates;
+	private ArrayList<Road> 	exitRoadsList;
 	
-	public Checkpoint(double x,double y){
-		this.id = 1;
+	public Checkpoint(int id, double x,double y, boolean endNode){
+		this.id = id;
 		this.coordinates = new Coordinates(x, y);
+		this.endNode = endNode;
 	}
 	
 	public int getId(){
@@ -21,7 +26,9 @@ public class Checkpoint {
 	public Coordinates getCoordinates(){
 		return this.coordinates;
 	}
-	
+	public void addRoad(Road road){
+		exitRoadsList.add(road);
+	}
 	//TODO
 	public void handleVehicle(Vehicle vehicle){
 		/**
@@ -33,6 +40,14 @@ public class Checkpoint {
 		if(vehicle.getOnRoad().isMonitored()){
 			//addToll
 		}
+	}
+
+	public boolean isEndNode() {
+		return endNode;
+	}
+
+	public ArrayList<Road> getRoads() {
+		return exitRoadsList;
 	}
 	
 }

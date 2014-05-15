@@ -8,22 +8,22 @@ import Vehicle.Vehicle;
 
 public class Road {
 
-	private int 					id;
+	private int 				id;
 	private double 				cost;
 	private boolean				monitored;
-	private Checkpoint 		start;
-	private Checkpoint 		end;
+	private Checkpoint 			start;
+	private Checkpoint 			end;
 	private double 				length;
-	private Set<Vehicle> 	vehicles;
+	private Set<Vehicle>	 	vehicles;
 	private double 				speedlimit;
 	
 	
-	public Road(double cost, Checkpoint start, Checkpoint end,Boolean monitored, double length, double speedlimit){
-		this.id = 1;
-		this.monitored = monitored;
+	public Road(int id, double cost, Checkpoint start, Checkpoint end,Boolean monitored, double length, double speedlimit){
+		this.id = id;
 		this.cost = cost;
 		this.start = start;
 		this.end = end;
+		this.monitored = monitored;
 		this.length = length;
 		this.vehicles = new HashSet<Vehicle>();
 		this.speedlimit = speedlimit;
