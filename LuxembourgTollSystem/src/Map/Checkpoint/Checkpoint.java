@@ -3,6 +3,7 @@ package Map.Checkpoint;
 import Map.Coordinates;
 import Vehicle.Vehicle;
 
+//TODO lista krawedzi
 public class Checkpoint {
 	
 	private int 				id;
@@ -29,6 +30,9 @@ public class Checkpoint {
 		 * change onRoad in veh
 		 * add Toll
 		 */
+		if(vehicle.getOnRoad().isMonitored()){
+			//addToll
+		}
 	}
 	
 }

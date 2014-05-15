@@ -3,12 +3,13 @@ package Map.Checkpoint;
 import java.util.Vector;
 
 import Map.Road;
+import Vehicle.Vehicle;
 
-public class Sink extends Checkpoint {
+public class EndNode extends Checkpoint {
 
 	public Vector<Road> in;
 	
-	public Sink(double x, double y) {
+	public EndNode(double x, double y) {
 		super(x, y);
 		this.in = new Vector<Road>();
 	}
@@ -16,5 +17,16 @@ public class Sink extends Checkpoint {
 	public Vector<Road> getOut(){
 		return this.in;
 	}
+	
+	//TODO
+	public void destroyCar(Vehicle vehicle){
+		
+	}
+	
+	//TODO
+	public void createCar(){
+	
+	}
+	
 	
 }

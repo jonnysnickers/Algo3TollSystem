@@ -6,6 +6,7 @@ public class Vehicle {
 
 	private Road 		onRoad;
 	private double 	maxSpeed;
+	private double  distanceOnRoad;
 	private double 	currentSpeed;
 	private String 	plate;
 
@@ -37,6 +38,14 @@ public class Vehicle {
 
 	public String getPlate() {
 		return this.plate;
+	}
+
+	public double getDistanceOnRoad() {
+		return distanceOnRoad;
+	}
+
+	public void setDistanceOnRoad(double distanceOnRoad) {
+		this.distanceOnRoad = distanceOnRoad;
 	}
 
 }

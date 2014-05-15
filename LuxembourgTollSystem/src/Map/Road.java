@@ -10,23 +10,27 @@ public class Road {
 
 	private int 					id;
 	private double 				cost;
+	private boolean				monitored;
 	private Checkpoint 		start;
 	private Checkpoint 		end;
 	private double 				length;
 	private Set<Vehicle> 	vehicles;
-	private boolean 			passable;
 	private double 				speedlimit;
 	
 	
-	public Road(double cost, Checkpoint start, Checkpoint end, double length, double speedlimit){
+	public Road(double cost, Checkpoint start, Checkpoint end,Boolean monitored, double length, double speedlimit){
 		this.id = 1;
+		this.monitored = monitored;
 		this.cost = cost;
 		this.start = start;
 		this.end = end;
 		this.length = length;
 		this.vehicles = new HashSet<Vehicle>();
-		this.passable = true;
 		this.speedlimit = speedlimit;
+	}
+	
+	public Boolean isMonitored(){
+		return this.monitored;
 	}
 	
 	public int getId(){
@@ -59,14 +63,6 @@ public class Road {
 	
 	public Set<Vehicle> getVehicles(){
 		return this.vehicles;
-	}
-	
-	public boolean isPassable(){
-		return this.passable;
-	}
-		
-	public void setPassable(boolean is){
-		this.passable = is;
 	}
 	
 	public double getSpeedLimit(){
