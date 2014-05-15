@@ -24,4 +24,23 @@ public class Toll {
 		this.exitDate = date;
 	}
 	
+	public Road getRoad(){
+		return this.road;
+	}
+	
+	public double getGold(){
+		return this.gold;
+	}
+	
+	public String getPlate(){
+		return this.plate;
+	}
+	
+	public Date getEnterDate(){
+		return this.enterDate;
+	}
+	
+	public Date getExitDate(){
+		return this.exitDate;
+	}
 }
