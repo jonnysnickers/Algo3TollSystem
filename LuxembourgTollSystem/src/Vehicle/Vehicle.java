@@ -3,6 +3,7 @@ package Vehicle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import LTS.DataBase;
 import Map.Map;
 import Map.Road;
 import Map.Checkpoint.Checkpoint;
