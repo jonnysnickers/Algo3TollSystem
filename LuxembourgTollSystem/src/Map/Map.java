@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.Vector;
 
 import Map.Checkpoint.Checkpoint;
-import Vehicle.Vehicle;
 
 public class Map {
 

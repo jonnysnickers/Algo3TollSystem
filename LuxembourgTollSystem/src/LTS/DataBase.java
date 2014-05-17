@@ -3,7 +3,9 @@ package LTS;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -16,12 +18,12 @@ public class DataBase {
 	private static DataBase instance = null;
 	
 	Map<String,Toll> unfinished;
-	Map<String,Toll> finished;
+	Set<Toll> finished;
 	
 	
 	private DataBase(){
 		unfinished = new HashMap<String,Toll>();
-		finished = new HashMap<String,Toll>();
+		finished = new HashSet<Toll>();
 	}
 	
 	public static DataBase getInstance(){
@@ -33,7 +35,7 @@ public class DataBase {
 		Toll toll = new Toll(road,plate);
 		
 		if(unfinished.containsKey(plate)){
-			JOptionPane.showMessageDialog(null, "HUEHUE");
+			JOptionPane.showMessageDialog(null, "HUEHUE: Car with plate: " + plate + " appear more than once!1!one!1two");
 			//TODO
 		}
 		
@@ -41,10 +43,16 @@ public class DataBase {
 	}
 	
 	public void addExitedToll(String plate){
-		Toll toll = unfinished.get(plate);
-		unfinished.remove(plate);
-		toll.setExitDate(new Date());
-		finished.put(toll.getPlate(),toll);
+		
+		try {
+			Toll toll = unfinished.get(plate);
+			unfinished.remove(plate);
+			toll.setExitDate(new Date());
+			finished.add(toll);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "HUEHUE: Car with plate: " + plate + " tried to exit even though there is no such car!!1!1onwtwo!1!");
+			//TODO
+		}
 	}
 	
 }

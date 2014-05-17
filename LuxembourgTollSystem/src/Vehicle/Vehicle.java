@@ -5,8 +5,6 @@ import java.util.Random;
 
 import utilsLTS.Utils;
 
-import javax.annotation.Generated;
-
 import LTS.DataBase;
 import Map.Map;
 import Map.Road;

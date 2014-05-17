@@ -20,6 +20,10 @@ public class Toll {
 		this.exitDate = null;
 	}
 	
+	public void write(){
+		System.out.println(road.getId() + " " + gold + " " + plate + " " + enterDate + " " + exitDate);
+	}
+	
 	public void setExitDate(Date date){
 		this.exitDate = date;
 	}
