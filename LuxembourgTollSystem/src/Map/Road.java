@@ -3,6 +3,7 @@ package Map;
 import java.util.HashSet;
 import java.util.Set;
 
+import LTS.DataBase;
 import Map.Checkpoint.Checkpoint;
 import Vehicle.Vehicle;
 
@@ -27,6 +28,23 @@ public class Road {
 		this.length = length;
 		this.vehicles = new HashSet<Vehicle>();
 		this.speedlimit = speedlimit;
+	}
+	
+	public String toString(){
+		StringBuilder res = new StringBuilder();
+		res.append(start.getId() + "->" + end.getId());
+		res.append("Contains vehicles: ");
+		for(Vehicle v : vehicles){
+			res.append(v.toString() + " ");
+		}
+		res.append("\n");
+		return res.toString();
+	}
+	
+	public void update(){
+		for(Vehicle v : vehicles){
+			v.move();
+		}
 	}
 	
 	public Boolean isMonitored(){
@@ -55,10 +73,16 @@ public class Road {
 	
 	public void addVehicle(Vehicle vehicle){
 		this.vehicles.add(vehicle);
+		if(isMonitored()){
+			DataBase.getInstance().addEnteredToll(vehicle.getPlate(), this);
+		}
 	}
 	
 	public void removeVehicle(Vehicle vehicle){
 		this.vehicles.remove(vehicle);
+		if(isMonitored()){
+			DataBase.getInstance().addExitedToll(vehicle.getPlate());
+		}
 	}
 	
 	public Set<Vehicle> getVehicles(){

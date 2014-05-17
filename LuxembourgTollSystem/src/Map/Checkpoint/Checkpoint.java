@@ -1,6 +1,7 @@
 package Map.Checkpoint;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import Map.Coordinates;
 import Map.Road;
@@ -12,11 +13,27 @@ public class Checkpoint {
 	private boolean				endNode;
 	private Coordinates 		coordinates;
 	private ArrayList<Road> 	exitRoadsList;
-	
+	/**
+	 * 
+	 * @param id - node ID
+	 * @param x - x coordinate on map
+	 * @param y - y coordinate on map
+	 * @param endNode - is checkpoint endNode
+	 */
 	public Checkpoint(int id, double x,double y, boolean endNode){
 		this.id = id;
 		this.coordinates = new Coordinates(x, y);
 		this.endNode = endNode;
+		exitRoadsList = new ArrayList<>();
+	}
+	
+	public String toString(){
+		StringBuilder res = new StringBuilder();
+		res.append("Point " + this.id + ": \n Roads:\n");
+		for(Road r : exitRoadsList){
+			res.append( "\t" + r.toString());
+		}
+		return res.toString();
 	}
 	
 	public int getId(){
@@ -48,6 +65,30 @@ public class Checkpoint {
 
 	public ArrayList<Road> getRoads() {
 		return exitRoadsList;
+	}
+	
+	/**
+	 * 
+	 * @param probability - probability of new vehicle appearing in given point 
+	 */
+	public void updateState(){
+		if(isEndNode()){
+			generateVehicle();
+		}
+		for(Road r : this.getRoads()){
+			r.update();
+		}
+	}
+	private void generateVehicle(){
+		double probablility = 0.1;
+		Random rand = new Random();
+		if(rand.nextDouble() < probablility){
+			Vehicle v = new Vehicle(1,2);
+			System.out.println("Node " + this.id + " generated vehicle!");
+			v.setOnRoad( this.getRoads().get( rand.nextInt(this.getRoads().size()) ) );
+			v.getOnRoad().addVehicle(v);
+			System.out.println("Vehicle: " + v.getPlate() + " on road: " + v.getOnRoad().getStart().getId() + " " + v.getOnRoad().getEnd().getId());
+		}
 	}
 	
 }

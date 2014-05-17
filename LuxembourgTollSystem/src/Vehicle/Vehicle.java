@@ -3,45 +3,73 @@ package Vehicle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import utilsLTS.Utils;
+
+import javax.annotation.Generated;
+
 import LTS.DataBase;
 import Map.Map;
 import Map.Road;
 import Map.Checkpoint.Checkpoint;
 
-abstract public class Vehicle {
+public class Vehicle {
 
 	private Road 		onRoad;
 	private double 		maxSpeed;
 	private double  	distanceOnRoad;
 	private double 		currentSpeed;
 	private String 		plate;
-
-	public Vehicle(double max, double curr, String plate) {
-		this.maxSpeed = max;
-		this.currentSpeed = curr;
+	
+	public Vehicle(double currentSpeed, double maxSpeed) {
+		this.maxSpeed = maxSpeed;
+		this.currentSpeed = currentSpeed;
+		this.plate = Utils.getRandomString(7);
+	}
+	
+	public Vehicle(double maxSpeed, double currentSpeed, String plate) {
+		this(maxSpeed,currentSpeed);
 		this.plate = plate;
 	}
 	
-	//Function activated every time when global state is updated
-	void move(){
-		//TODO
-		double traveledDistance = currentSpeed * Map.getInstance().getTimeStep();
-		if(roadEnded())chooseNewRoad();
+	public String toString(){
+		return plate;
+	}
+	
+	/**
+	 * Function activated every time when global state is updated
+	 */
+	public void move(){
+		System.out.print(distanceOnRoad + " ");
+		distanceOnRoad += currentSpeed * Map.getInstance().getTimeStep();
+		System.out.println(distanceOnRoad);
+		while(roadEnded()){
+			chooseNewRoad();
+		}
 	}
 
-	//Method chooses new road for vehicle when vehicle reaches end of the road
+	/**
+	 * Method chooses new road for vehicle when vehicle reaches end of the road
+	 */
 	void chooseNewRoad(){
 		distanceOnRoad -= onRoad.getLength();
 		Checkpoint end = onRoad.getEnd();
 		onRoad.removeVehicle(this);
-			
-		if(!end.isEndNode()){
+		
+		if(end.isEndNode()){
+			System.out.println("Node " + end.getId() + " phagocyted vehicle " + this.getPlate() + "\n");			
+		}
+		
+		else{
 			if( onRoad.isMonitored() ){
 				DataBase.getInstance().addExitedToll(plate);
 			}
 			ArrayList <Road> nextRoads = end.getRoads();
 			Random rand = new Random();
-			onRoad = nextRoads.get(rand.nextInt(nextRoads.size()));
+			Road newRoad = nextRoads.get(rand.nextInt(nextRoads.size()));
+			System.out.println("Vehicle " + this.getPlate() + " changed road "
+					+ onRoad.getStart().getId() + "->" + onRoad.getEnd().getId() + " to "
+					+ newRoad.getStart().getId() + "->" + newRoad.getEnd().getId() + "\n");
+			onRoad = newRoad; 
 
 			if(onRoad.isMonitored()){
 				DataBase.getInstance().addEnteredToll(plate,onRoad);
@@ -77,7 +105,7 @@ abstract public class Vehicle {
 	public String getPlate() {
 		return this.plate;
 	}
-
+	
 	public double getDistanceOnRoad() {
 		return distanceOnRoad;
 	}
