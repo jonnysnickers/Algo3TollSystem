@@ -1,10 +1,8 @@
-package Map.Checkpoint;
+package Map;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import Map.Coordinates;
-import Map.Road;
 import Vehicle.Vehicle;
 
 public class Checkpoint {
@@ -83,10 +81,8 @@ public class Checkpoint {
 		double probablility = 0.1;
 		Random rand = new Random();
 		if(rand.nextDouble() < probablility){
-			Vehicle v = new Vehicle(1,2);
+			Vehicle v = new Vehicle(this.getRoads().get( rand.nextInt(this.getRoads().size()) ));
 			System.out.println("Node " + this.id + " generated vehicle!");
-			v.setOnRoad( this.getRoads().get( rand.nextInt(this.getRoads().size()) ) );
-			v.getOnRoad().addVehicle(v);
 			System.out.println("Vehicle: " + v.getPlate() + " on road: " + v.getOnRoad().getStart().getId() + " " + v.getOnRoad().getEnd().getId());
 		}
 	}
