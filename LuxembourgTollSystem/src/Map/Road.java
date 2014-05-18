@@ -1,10 +1,10 @@
 package Map;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import LTS.DataBase;
-import Map.Checkpoint.Checkpoint;
 import Vehicle.Vehicle;
 
 public class Road {
@@ -19,15 +19,20 @@ public class Road {
 	private double 				speedlimit;
 	
 	
-	public Road(int id, double cost, Checkpoint start, Checkpoint end,Boolean monitored, double length, double speedlimit){
+	public Road(int id, Checkpoint start, Checkpoint end){
+		Random rand = new Random();
 		this.id = id;
-		this.cost = cost;
+		//Cost of using road - double between 0 and 30
+		this.cost = (int)( rand.nextDouble()* 100)/100.0;
 		this.start = start;
 		this.end = end;
-		this.monitored = monitored;
-		this.length = length;
+		//Road can be monitored with probability 0.3
+		this.monitored = rand.nextDouble()<0.3;
+		//Length of road between 10 and 30 km
+		this.length = rand.nextInt(21)+10;
 		this.vehicles = new HashSet<Vehicle>();
-		this.speedlimit = speedlimit;
+		//Speed limit equal to 90 or 120 or 150
+		this.speedlimit = rand.nextInt(3) * 30 + 90;
 	}
 	
 	public String toString(){

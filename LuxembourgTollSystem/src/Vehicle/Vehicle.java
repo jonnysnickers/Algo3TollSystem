@@ -3,29 +3,30 @@ package Vehicle;
 import java.util.ArrayList;
 import java.util.Random;
 
-import utilsLTS.Utils;
-
 import LTS.DataBase;
+import Map.Checkpoint;
 import Map.Map;
 import Map.Road;
-import Map.Checkpoint.Checkpoint;
 
 public class Vehicle {
 
 	private Road 		onRoad;
-	private double 		maxSpeed;
+	private int 		maxSpeed;
 	private double  	distanceOnRoad;
-	private double 		currentSpeed;
+	private int			currentSpeed;
 	private String 		plate;
+	private Random		rand;
 	
-	public Vehicle(double currentSpeed, double maxSpeed) {
-		this.maxSpeed = maxSpeed;
-		this.currentSpeed = currentSpeed;
-		this.plate = Utils.getRandomString(7);
+	public Vehicle(Road onRoad) {
+		this.onRoad = onRoad;
+		onRoad.addVehicle(this);
+		this.maxSpeed = 180;
+		this.currentSpeed = 90;
+		this.plate = getRandomString(7);
 	}
 	
-	public Vehicle(double maxSpeed, double currentSpeed, String plate) {
-		this(maxSpeed,currentSpeed);
+	public Vehicle(Road onRoad, String plate) {
+		this(onRoad);
 		this.plate = plate;
 	}
 	
@@ -37,8 +38,8 @@ public class Vehicle {
 	 * Function activated every time when global state is updated
 	 */
 	public void move(){
-		System.out.print(distanceOnRoad + " ");
 		distanceOnRoad += currentSpeed * Map.getInstance().getTimeStep();
+		currentSpeed = currentSpeed + rand.nextInt(7)-3;
 		System.out.println(distanceOnRoad);
 		while(roadEnded()){
 			chooseNewRoad();
@@ -96,7 +97,7 @@ public class Vehicle {
 		return this.currentSpeed;
 	}
 
-	public void setCurrentSpeed(double currentSpeed) {
+	public void setCurrentSpeed(int currentSpeed) {
 		this.currentSpeed = currentSpeed;
 	}
 
@@ -110,6 +111,24 @@ public class Vehicle {
 
 	public void setDistanceOnRoad(double distanceOnRoad) {
 		this.distanceOnRoad = distanceOnRoad;
+	}
+	
+	/**
+	 * Generates random string of given length
+	 * @param len - length of string
+	 * @return
+	 */
+	public static String getRandomString(int len){
+		StringBuilder string = new StringBuilder();
+		Random rand = new Random();
+		
+		char letter;
+		for(int i=0; i<len; i++){
+			letter = (char)( (int)'A' + rand.nextInt(26) );
+			string.append(letter);
+		}
+		
+		return string.toString();
 	}
 
 }

@@ -1,9 +1,11 @@
 package Vehicle;
 
+import Map.Road;
+
 public class Mower extends Vehicle{
 
-	public Mower(double max, double curr, String plate) {
-		super(max, curr, plate);
+	public Mower(Road onRoad) {
+		super(onRoad);
 	}
 	
 }

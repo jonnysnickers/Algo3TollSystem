@@ -3,7 +3,6 @@ package Map;
 import java.util.Random;
 import java.util.Vector;
 
-import Map.Checkpoint.Checkpoint;
 
 public class Map {
 
@@ -18,7 +17,7 @@ public class Map {
 	
 	private Map(){
 		checkpoints = new Vector<>();
-		timestep = 1;
+		timestep = 1.0/3600; //1 second
 		createGraph();
 	};
 				
@@ -54,29 +53,25 @@ public class Map {
 			//Roads leading south
 			if(i<12){
 				end = checkpoints.get(i+3);
-				//TODO parameters set to constant: cost = 10, monitored = false, length = 1, speedLimit=1
-				Road r = new Road(roadCounter++,1,start,end,false,1,1);
+				Road r = new Road(roadCounter++,start,end);
 				start.addRoad(r);
 			}
 			//Roads leading north
 			if(i>3){
 				end = checkpoints.get(i-3);
-				//TODO parameters set to constant: cost = 10, monitored = false, length = 1, speedLimit=1
-				Road r = new Road(roadCounter++,1,start,end,false,1,1);
+				Road r = new Road(roadCounter++,start,end);
 				start.addRoad(r);
 			}
 			//Roads leading east
 			if((i%3-2)!=0){
 				end = checkpoints.get(i+1);
-				//TODO parameters set to constant: cost = 10, monitored = false, length = 1, speedLimit=1
-				Road r = new Road(roadCounter++,1,start,end,false,1,1);
+				Road r = new Road(roadCounter++,start,end);
 				start.addRoad(r);
 			}
 			//Roads leading west
 			if(i%3!=0){
 				end = checkpoints.get(i-1);
-				//TODO parameters set to constant: cost = 10, monitored = false, length = 1, speedLimit=1
-				Road r = new Road(roadCounter++,1,start,end,false,1,1);
+				Road r = new Road(roadCounter++,start,end);
 				start.addRoad(r);
 			}
 		}

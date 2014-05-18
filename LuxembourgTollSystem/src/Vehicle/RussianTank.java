@@ -1,9 +1,10 @@
 package Vehicle;
 
+import Map.Road;
+
 public class RussianTank extends Vehicle {
  
-	public RussianTank(double max, double curr, String plate) {
-		super(max, curr, plate);
+	public RussianTank(Road onRoad) {
+		super(onRoad);
 	}
-	
 }
