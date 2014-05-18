@@ -9,15 +9,27 @@ import java.util.Map;
 import java.util.Set;
 
 public class OurMagicGenericQuery {
-
-	public void doQuery(String query) throws ParseException {
+	
+	/**
+	 * 
+	 * @param query - Query in form SELECT(conditions)[GROUP(field)][COMMAND].
+	 * Things in [] are optional. COMMAND is one from MIN(field)/MAX(field)/COUNT/SUM.
+	 * "field" is one from road/gold/plate/enterDate/exitDate.
+	 * conditions is string in form "field(<>=)value[&field(<>=)value...]".
+	 * Value for date is in form "yyyy-MM-dd'T'HH:mm:ss" for example "2000-10-10T10:10:10".
+	 * Plates are compared lexicographically.
+	 * For Road there is only = operator (typing < or > is considered as =).
+	 * @return String that is answer to given query.
+	 * @throws ParseException
+	 */
+	public String doQuery(String query) throws ParseException {
 
 		/** Handling SELECT part **/
 		int j = query.indexOf(")");
 		String con = query.substring(7, j);
 		Set<Toll> afterSelect = select(con);
 
-		/** Handling GROUP() part, setting NoGrouping if no GROUP **/
+		/** Handling GROUP(field) part, setting NoGrouping if no GROUP or GROUP() **/
 		Map<String, Set<Toll>> afterGroup = null;
 
 		if (query.contains("GROUP(plate)")) {
@@ -35,34 +47,40 @@ public class OurMagicGenericQuery {
 			afterGroup.put("NoGrouping", afterSelect);
 		}
 
-		/** Handling SUM/COUNT/MIN()/MAX() **/
+		/** Handling SUM/COUNT/MIN(field)/MAX(field) **/
 		if (query.contains("SUM")) {
-			OMGSum(afterGroup);
+			return OMGSum(afterGroup);
 		} else if (query.contains("COUNT")) {
-			OMGCount(afterGroup);
+			return OMGCount(afterGroup);
 		} else if (query.contains("MIN")) {
 			int i = query.indexOf("MIN");
 			i = query.indexOf("(", i) + 1;
 			j = query.indexOf(")", i);
-			OMGMin(afterGroup, query.substring(i, j));
+			return OMGMin(afterGroup, query.substring(i, j));
 		} else if (query.contains("MAX")) {
 			int i = query.indexOf("MAX");
 			i = query.indexOf("(", i) + 1;
 			j = query.indexOf(")", i);
-			OMGMax(afterGroup, query.substring(i, j));
+			return OMGMax(afterGroup, query.substring(i, j));
 		} else {
-			/** Case when there is no SUM/COUNT/MIN()/MAX() **/
+			/** Case in which there is no SUM/COUNT/MIN()/MAX() **/
+			StringBuilder sb = new StringBuilder("");
 			for (Map.Entry<String, Set<Toll>> entry : afterGroup.entrySet()) {
 				Set<Toll> tollset = entry.getValue();
-				System.out.println(entry.getKey() + ":");
+				sb.append(entry.getKey() + ":\n");
 				for (Toll toll : tollset) {
-					toll.write();
+					sb.append(toll.toString());
 				}
 			}
+			return sb.toString();
 		}
-
 	}
-
+	
+	/**
+	 * This function is responsible for grouping Set of Tolls into Subsets by Roads.
+	 * @param source - Set of Tolls to be grouped.
+	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Roads.
+	 */
 	public Map<String, Set<Toll>> groupByRoad(Set<Toll> source) {
 		Map<String, Set<Toll>> res = new HashMap<String, Set<Toll>>();
 
@@ -78,6 +96,11 @@ public class OurMagicGenericQuery {
 		return res;
 	}
 
+	/**
+	 * This function is responsible for grouping Set of Tolls into Subsets by Plates.
+	 * @param source - Set of Tolls to be grouped.
+	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Plates.
+	 */
 	public Map<String, Set<Toll>> groupByPlate(Set<Toll> source) {
 		Map<String, Set<Toll>> res = new HashMap<String, Set<Toll>>();
 
@@ -93,6 +116,11 @@ public class OurMagicGenericQuery {
 		return res;
 	}
 
+	/**
+	 * This function is responsible for grouping Set of Tolls into Subsets by Gold.
+	 * @param source - Set of Tolls to be grouped.
+	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Gold.
+	 */
 	public Map<String, Set<Toll>> groupByGold(Set<Toll> source) {
 		Map<String, Set<Toll>> res = new HashMap<String, Set<Toll>>();
 
@@ -108,6 +136,11 @@ public class OurMagicGenericQuery {
 		return res;
 	}
 
+	/**
+	 * This function is responsible for grouping Set of Tolls into Subsets by EnterDates.
+	 * @param source - Set of Tolls to be grouped.
+	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by EnterDates.
+	 */
 	public Map<String, Set<Toll>> groupByEnterDate(Set<Toll> source) {
 		Map<String, Set<Toll>> res = new HashMap<String, Set<Toll>>();
 
@@ -123,6 +156,11 @@ public class OurMagicGenericQuery {
 		return res;
 	}
 
+	/**
+	 * This function is responsible for grouping Set of Tolls into Subsets by ExitDates.
+	 * @param source - Set of Tolls to be grouped.
+	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by ExitDates.
+	 */
 	public Map<String, Set<Toll>> groupByExitDate(Set<Toll> source) {
 		Map<String, Set<Toll>> res = new HashMap<String, Set<Toll>>();
 
@@ -138,126 +176,170 @@ public class OurMagicGenericQuery {
 		return res;
 	}
 
-	public void OMGSum(Map<String, Set<Toll>> source) {
+	/**
+	 * This function is responsible for summing gold in sets of Tolls.
+	 * @param source - Sets of Tolls grouped by some criteria.
+	 * @return String containing 'names' by witch sets are grouped followed by sum of gold in corresponding sets.
+	 */
+	public String OMGSum(Map<String, Set<Toll>> source) {
+		StringBuilder sb = new StringBuilder("");
 		for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 			Double sum = 0.0;
 			Set<Toll> tollset = entry.getValue();
-			System.out.print(entry.getKey() + ": ");
+			sb.append(entry.getKey() + ": ");
 			for (Toll toll : tollset) {
 				sum += toll.getGold();
 			}
-			System.out.print(sum + "\n");
+			sb.append(Math.round(sum*100)/100.0 + "\n");
 		}
+		return sb.toString();
 	}
 
-	public void OMGCount(Map<String, Set<Toll>> source) {
+	/**
+	 * This function is responsible for counting entries in sets of Tolls.
+	 * @param source - Sets of Tolls grouped by some criteria.
+	 * @return String containing 'names' by witch sets are grouped followed by number of record in corresponding sets.
+	 */
+	public String OMGCount(Map<String, Set<Toll>> source) {
+		StringBuilder sb = new StringBuilder("");
 		for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 			int counter = 0;
 			Set<Toll> tollset = entry.getValue();
-			System.out.print(entry.getKey() + ": ");
+			sb.append(entry.getKey() + ": ");
 			for (@SuppressWarnings("unused") Toll toll : tollset) {
 				counter++;
 			}
-			System.out.print(counter + "\n");
+			sb.append(counter + "\n");
 		}
+		return sb.toString();
 	}
 
-	public void OMGMin(Map<String, Set<Toll>> source, String field) throws ParseException {
+	/**
+	 * This function is responsible for selecting minimum of given field in sets of Tolls.
+	 * @param source - Sets of Tolls grouped by some criteria.
+	 * @param field - name of field in which we search for minimum.
+	 * @return String containing 'names' by witch sets are grouped followed by minimum field in corresponding sets. Query for minimum plate and road makes no sense.
+	 * @throws ParseException
+	 */
+	public String OMGMin(Map<String, Set<Toll>> source, String field) throws ParseException {
+		StringBuilder sb = new StringBuilder("");
 		if (field.equals("plate")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!\n";
 		}
 		if (field.equals("gold")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Double res = Double.MAX_VALUE;
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (res > toll.getGold()) {
 						res = toll.getGold();
 					}
 				}
-				System.out.print(res + "\n");
+				sb.append(Math.round(res*100)/100.0 + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("road")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!\n";
 		}
 		if (field.equals("enterDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2100-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.after(toll.getEnterDate())) {
 						date = toll.getEnterDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("exitDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2100-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.after(toll.getExitDate())) {
 						date = toll.getExitDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
+		return null;
 	}
 
-	public void OMGMax(Map<String, Set<Toll>> source, String field) throws ParseException {
+	/**
+	 * This function is responsible for selecting maximum of given field in sets of Tolls.
+	 * @param source - Sets of Tolls grouped by some criteria.
+	 * @param field - name of field in which we search for maximum.
+	 * @return String containing 'names' by witch sets are grouped followed by maximum field in corresponding sets. Query for minimum plate and road makes no sense.
+	 * @throws ParseException
+	 */
+	public String OMGMax(Map<String, Set<Toll>> source, String field) throws ParseException {
+		StringBuilder sb = new StringBuilder("");
 		if (field.equals("plate")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!\n";
 		}
 		if (field.equals("gold")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Double res = Double.MIN_VALUE;
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (res < toll.getGold()) {
 						res = toll.getGold();
 					}
 				}
-				System.out.print(res + "\n");
+				sb.append(Math.round(res*100)/100.0 + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("road")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!\n";
 		}
 		if (field.equals("enterDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2000-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.before(toll.getEnterDate())) {
 						date = toll.getEnterDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("exitDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2000-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.before(toll.getExitDate())) {
 						date = toll.getExitDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
+		return null;
 	}
 
+	/**
+	 * This function is responsible for selecting toll that satisfy given criteria from all Tolls stored in DataBase.finished.
+	 * @param con - criteria of search in form "field(<>=)value". Connected by & if more than one.
+	 * @return Set<Toll>result - set of Tolls satisfying con.
+	 * @throws ParseException
+	 */
 	public Set<Toll> select(String con) throws ParseException {
 
 		String[] conditions = con.split("&");
@@ -282,7 +364,9 @@ public class OurMagicGenericQuery {
 					operation = '<';
 					tmp = condition.split("<");
 				}
-
+				
+				if(tmp.length != 2)continue;
+				
 				if (tmp[0].equals("road")) {
 					if (!tmp[1].equals(((Integer) toll.getRoad().getId()).toString())) {
 						pass = false;

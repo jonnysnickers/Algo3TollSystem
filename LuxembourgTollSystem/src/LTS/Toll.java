@@ -5,6 +5,13 @@ import java.util.Date;
 import Map.Road;
 
 public class Toll {
+	/**
+	 * Object of this class store information about one Toll.
+	 * road,gold,plate and enterDate are set in constructor and can not be changed.
+	 * It is possible to change exitDate only if it was null before.
+	 * To easily write information about Toll use toString() function.
+	 */
+	
 	
 	Road 		road;
 	double 	gold;
@@ -20,12 +27,15 @@ public class Toll {
 		this.exitDate = null;
 	}
 	
-	public void write(){
-		System.out.println(road.getId() + " " + gold + " " + plate + " " + enterDate + " " + exitDate);
+	@Override
+	public String toString(){
+		return road.getId() + " " + Math.round(gold*100)/100.0 + " " + plate + " " + enterDate + " " + exitDate + "\n";
 	}
 	
 	public void setExitDate(Date date){
-		this.exitDate = date;
+		if(this.exitDate == null){
+			this.exitDate = date;
+		}
 	}
 	
 	public Road getRoad(){
