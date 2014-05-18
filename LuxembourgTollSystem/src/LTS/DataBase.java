@@ -55,4 +55,9 @@ public class DataBase {
 		}
 	}
 	
+	public Set<Toll> getFinished(){
+		return this.finished;
+	}
+	
+	
 }

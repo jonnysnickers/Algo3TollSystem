@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class OurMagicGenericQuery {
 
-	public void doQuery(String query) throws ParseException {
+	public String doQuery(String query) throws ParseException {
 
 		/** Handling SELECT part **/
 		int j = query.indexOf(")");
@@ -37,30 +37,32 @@ public class OurMagicGenericQuery {
 
 		/** Handling SUM/COUNT/MIN()/MAX() **/
 		if (query.contains("SUM")) {
-			OMGSum(afterGroup);
+			return OMGSum(afterGroup);
 		} else if (query.contains("COUNT")) {
-			OMGCount(afterGroup);
+			return OMGCount(afterGroup);
 		} else if (query.contains("MIN")) {
 			int i = query.indexOf("MIN");
 			i = query.indexOf("(", i) + 1;
 			j = query.indexOf(")", i);
-			OMGMin(afterGroup, query.substring(i, j));
+			return OMGMin(afterGroup, query.substring(i, j));
 		} else if (query.contains("MAX")) {
 			int i = query.indexOf("MAX");
 			i = query.indexOf("(", i) + 1;
 			j = query.indexOf(")", i);
-			OMGMax(afterGroup, query.substring(i, j));
+			return OMGMax(afterGroup, query.substring(i, j));
 		} else {
 			/** Case when there is no SUM/COUNT/MIN()/MAX() **/
+			StringBuilder sb = new StringBuilder("");
 			for (Map.Entry<String, Set<Toll>> entry : afterGroup.entrySet()) {
 				Set<Toll> tollset = entry.getValue();
-				System.out.println(entry.getKey() + ":");
+				sb.append(entry.getKey() + ":\n");
 				for (Toll toll : tollset) {
-					toll.write();
+					sb.append(toll.toString());
+					//toll.write();
 				}
 			}
+			return sb.toString();
 		}
-
 	}
 
 	public Map<String, Set<Toll>> groupByRoad(Set<Toll> source) {
@@ -138,124 +140,138 @@ public class OurMagicGenericQuery {
 		return res;
 	}
 
-	public void OMGSum(Map<String, Set<Toll>> source) {
+	public String OMGSum(Map<String, Set<Toll>> source) {
+		StringBuilder sb = new StringBuilder("");
 		for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 			Double sum = 0.0;
 			Set<Toll> tollset = entry.getValue();
-			System.out.print(entry.getKey() + ": ");
+			sb.append(entry.getKey() + ": ");
 			for (Toll toll : tollset) {
 				sum += toll.getGold();
 			}
-			System.out.print(sum + "\n");
+			sb.append(sum + "\n");
 		}
+		return sb.toString();
 	}
 
-	public void OMGCount(Map<String, Set<Toll>> source) {
+	public String OMGCount(Map<String, Set<Toll>> source) {
+		StringBuilder sb = new StringBuilder("");
 		for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 			int counter = 0;
 			Set<Toll> tollset = entry.getValue();
-			System.out.print(entry.getKey() + ": ");
+			sb.append(entry.getKey() + ": ");
 			for (@SuppressWarnings("unused") Toll toll : tollset) {
 				counter++;
 			}
-			System.out.print(counter + "\n");
+			sb.append(counter + "\n");
 		}
+		return sb.toString();
 	}
 
-	public void OMGMin(Map<String, Set<Toll>> source, String field) throws ParseException {
+	public String OMGMin(Map<String, Set<Toll>> source, String field) throws ParseException {
+		StringBuilder sb = new StringBuilder("");
 		if (field.equals("plate")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!";
 		}
 		if (field.equals("gold")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Double res = Double.MAX_VALUE;
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (res > toll.getGold()) {
 						res = toll.getGold();
 					}
 				}
-				System.out.print(res + "\n");
+				sb.append(res + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("road")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!";
 		}
 		if (field.equals("enterDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2100-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.after(toll.getEnterDate())) {
 						date = toll.getEnterDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("exitDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2100-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.after(toll.getExitDate())) {
 						date = toll.getExitDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
+		return null;
 	}
 
-	public void OMGMax(Map<String, Set<Toll>> source, String field) throws ParseException {
+	public String OMGMax(Map<String, Set<Toll>> source, String field) throws ParseException {
+		StringBuilder sb = new StringBuilder("");
 		if (field.equals("plate")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!";
 		}
 		if (field.equals("gold")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Double res = Double.MIN_VALUE;
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (res < toll.getGold()) {
 						res = toll.getGold();
 					}
 				}
-				System.out.print(res + "\n");
+				sb.append(res + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("road")) {
-			System.out.println("This query makes no sense!");
+			return "This query makes no sense!";
 		}
 		if (field.equals("enterDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2000-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.before(toll.getEnterDate())) {
 						date = toll.getEnterDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
 		if (field.equals("exitDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2000-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
-				System.out.print(entry.getKey() + ": ");
+				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
 					if (date.before(toll.getExitDate())) {
 						date = toll.getExitDate();
 					}
 				}
-				System.out.print(date + "\n");
+				sb.append(date + "\n");
 			}
+			return sb.toString();
 		}
+		return null;
 	}
 
 	public Set<Toll> select(String con) throws ParseException {
