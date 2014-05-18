@@ -1,6 +1,5 @@
 package LTS;
 
-import static org.junit.Assert.*;
 
 import java.text.ParseException;
 

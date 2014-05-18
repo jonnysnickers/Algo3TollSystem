@@ -1,9 +1,9 @@
 package Map;
 
-import java.io.IOException;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Vector;
+
+import LTS.GraphicalUserInterface;
 
 public class Map implements Runnable {
 
@@ -136,16 +136,7 @@ public class Map implements Runnable {
 	public static void main(String[] args) {
 		Thread t = new Thread( Map.getInstance() );
 		t.start();
-		
-		Scanner keyboard = new Scanner(System.in);
-		int i=0;
-		while(i !=1){
-			i = keyboard.nextInt();
-			if(i==1){
-				Map.getInstance().setEND_SIMULATION(true);
-			}
-		}
-		keyboard.close();
+		new GraphicalUserInterface();
 	}
 
 
