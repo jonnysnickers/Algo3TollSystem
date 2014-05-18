@@ -3,8 +3,6 @@ package Vehicle;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.JOptionPane;
-
 import LTS.DataBase;
 import Map.Checkpoint;
 import Map.Map;
@@ -20,21 +18,19 @@ public class Vehicle {
 	private Random		rand;
 	
 	public Vehicle(Road onRoad) {
-		this.onRoad = onRoad;
-		onRoad.addVehicle(this);
+		rand = new Random();
 		this.maxSpeed = 180;
 		this.currentSpeed = 90;
 		this.plate = getRandomString(7);
-		if(this.plate == null)JOptionPane.showMessageDialog(null, "HUEHUE: null");
-		rand = new Random();
+		this.onRoad = onRoad;
+		onRoad.addVehicle(this);
 	}
 	
-	/*
 	public Vehicle(Road onRoad, String plate) {
 		this(onRoad);
 		this.plate = plate;
 	}
-	*/
+	
 	public String toString(){
 		return plate;
 	}
@@ -43,9 +39,11 @@ public class Vehicle {
 	 * Function activated every time when global state is updated
 	 */
 	public void move(){
+		System.out.println(plate + " " + onRoad.getStart().getId() + "->" + onRoad.getEnd().getId() + " " + distanceOnRoad + "/" + onRoad.getLength() + (onRoad.isMonitored()? "!!!" : "") );
 		distanceOnRoad += currentSpeed * Map.getInstance().getTimeStep();
 		currentSpeed = currentSpeed + rand.nextInt(7)-3;
-		System.out.println(distanceOnRoad);
+		if(currentSpeed < 0) currentSpeed = 0;
+		if(currentSpeed > maxSpeed || currentSpeed > onRoad.getSpeedLimit()) currentSpeed = Math.min(maxSpeed,onRoad.getSpeedLimit());
 		while(roadEnded()){
 			chooseNewRoad();
 		}
@@ -64,9 +62,6 @@ public class Vehicle {
 		}
 		
 		else{
-			if( onRoad.isMonitored() ){
-				DataBase.getInstance().addExitedToll(plate);
-			}
 			ArrayList <Road> nextRoads = end.getRoads();
 			Random rand = new Random();
 			Road newRoad = nextRoads.get(rand.nextInt(nextRoads.size()));
@@ -74,10 +69,6 @@ public class Vehicle {
 					+ onRoad.getStart().getId() + "->" + onRoad.getEnd().getId() + " to "
 					+ newRoad.getStart().getId() + "->" + newRoad.getEnd().getId() + "\n");
 			onRoad = newRoad; 
-
-			if(onRoad.isMonitored()){
-				DataBase.getInstance().addEnteredToll(plate,onRoad);
-			}
 			onRoad.addVehicle(this);
 		}
 	}

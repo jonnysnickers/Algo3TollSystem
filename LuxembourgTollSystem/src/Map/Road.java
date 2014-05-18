@@ -1,5 +1,6 @@
 package Map;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -9,14 +10,14 @@ import Vehicle.Vehicle;
 
 public class Road {
 
-	private int 				id;
-	private double 				cost;
-	private boolean				monitored;
-	private Checkpoint 			start;
-	private Checkpoint 			end;
-	private double 				length;
-	private Set<Vehicle>	 	vehicles;
-	private double 				speedlimit;
+	private int 					id;
+	private double 					cost;
+	private boolean					monitored;
+	private Checkpoint 				start;
+	private Checkpoint 				end;
+	private double 					length;
+	private ArrayList <Vehicle>	 	vehicles;
+	private int						speedlimit;
 	
 	
 	public Road(int id, Checkpoint start, Checkpoint end){
@@ -30,7 +31,7 @@ public class Road {
 		this.monitored = rand.nextDouble()<0.3;
 		//Length of road between 10 and 30 km
 		this.length = rand.nextInt(21)+10;
-		this.vehicles = new HashSet<Vehicle>();
+		this.vehicles = new ArrayList<>();
 		//Speed limit equal to 90 or 120 or 150
 		this.speedlimit = rand.nextInt(3) * 30 + 90;
 	}
@@ -47,8 +48,8 @@ public class Road {
 	}
 	
 	public void update(){
-		for(Vehicle v : vehicles){
-			v.move();
+		for(int i=0; i<vehicles.size();i++){
+			vehicles.get(i).move();
 		}
 	}
 	
@@ -79,6 +80,7 @@ public class Road {
 	public void addVehicle(Vehicle vehicle){
 		this.vehicles.add(vehicle);
 		if(isMonitored()){
+			System.out.println("Generated Enter Toll: " + vehicle.getPlate());
 			DataBase.getInstance().addEnteredToll(vehicle.getPlate(), this);
 		}
 	}
@@ -86,15 +88,16 @@ public class Road {
 	public void removeVehicle(Vehicle vehicle){
 		this.vehicles.remove(vehicle);
 		if(isMonitored()){
+			System.out.println("Generated Exit Toll: " + vehicle.getPlate());
 			DataBase.getInstance().addExitedToll(vehicle.getPlate());
 		}
 	}
 	
-	public Set<Vehicle> getVehicles(){
+	public ArrayList<Vehicle> getVehicles(){
 		return this.vehicles;
 	}
 	
-	public double getSpeedLimit(){
+	public int getSpeedLimit(){
 		return this.speedlimit;
 	}
 	

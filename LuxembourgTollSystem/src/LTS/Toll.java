@@ -24,10 +24,6 @@ public class Toll {
 		System.out.println(road.getId() + " " + gold + " " + plate + " " + enterDate + " " + exitDate);
 	}
 	
-	public String toString(){
-		return road.getId() + " " + gold + " " + plate + " " + enterDate + " " + exitDate + "\n";
-	}
-	
 	public void setExitDate(Date date){
 		this.exitDate = date;
 	}

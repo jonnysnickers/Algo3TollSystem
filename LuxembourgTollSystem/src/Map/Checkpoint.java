@@ -78,7 +78,7 @@ public class Checkpoint {
 		}
 	}
 	private void generateVehicle(){
-		double probablility = 0.1;
+		double probablility = 1;
 		Random rand = new Random();
 		if(rand.nextDouble() < probablility){
 			Vehicle v = new Vehicle(this.getRoads().get( rand.nextInt(this.getRoads().size()) ));
