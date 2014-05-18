@@ -3,6 +3,8 @@ package Vehicle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 import LTS.DataBase;
 import Map.Checkpoint;
 import Map.Map;
@@ -23,13 +25,16 @@ public class Vehicle {
 		this.maxSpeed = 180;
 		this.currentSpeed = 90;
 		this.plate = getRandomString(7);
+		if(this.plate == null)JOptionPane.showMessageDialog(null, "HUEHUE: null");
+		rand = new Random();
 	}
 	
+	/*
 	public Vehicle(Road onRoad, String plate) {
 		this(onRoad);
 		this.plate = plate;
 	}
-	
+	*/
 	public String toString(){
 		return plate;
 	}
