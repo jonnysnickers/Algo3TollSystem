@@ -8,9 +8,10 @@ import Vehicle.Vehicle;
 public class Checkpoint {
 	
 	private int 						id;
-	private boolean					endNode;
-	private Coordinates 		coordinates;
-	private ArrayList<Road> exitRoadsList;
+	private boolean						endNode; 		//Determines if checkpoint is at the border of our map
+	private Coordinates 				coordinates;	//Coordinates representing point location on the map
+	private ArrayList<Road> 			exitRoadsList;	//List of roads exiting given checkpoint
+	
 	/**
 	 * 
 	 * @param id - node ID
@@ -44,18 +45,6 @@ public class Checkpoint {
 	public void addRoad(Road road){
 		exitRoadsList.add(road);
 	}
-	//TODO
-	public void handleVehicle(Vehicle vehicle){
-		/**
-		 * delete veh from old road
-		 * add veh to new road
-		 * change onRoad in veh
-		 * add Toll
-		 */
-		if(vehicle.getOnRoad().isMonitored()){
-			//addToll
-		}
-	}
 
 	public boolean isEndNode() {
 		return endNode;
@@ -66,7 +55,8 @@ public class Checkpoint {
 	}
 	
 	/**
-	 * 
+	 * Method responsible for updating world state by generating new cars
+	 * and updating each road exiting given checkpoint
 	 * @param probability - probability of new vehicle appearing in given point 
 	 */
 	public void updateState(){
@@ -77,6 +67,11 @@ public class Checkpoint {
 			r.update();
 		}
 	}
+	
+	/**
+	 * Method generates vehicle with given probability. For our purpose, 
+	 * to simulate large traffic we set this value to 1 for all checkpoints
+	 */
 	private void generateVehicle(){
 		double probablility = 1;
 		Random rand = new Random();

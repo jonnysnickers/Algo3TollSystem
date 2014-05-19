@@ -1,40 +1,44 @@
 package Map;
 
-import java.util.Random;
 import java.util.Vector;
 
 import LTS.GraphicalUserInterface;
 
-public class Map implements Runnable {
+/**
+ * Singleton class representing simulation of real world 
+ *
+ */
+public class World implements Runnable {
 
-	private static Map 					instance = null;
-	private boolean 						END_SIMULATION;
-	private Vector<Checkpoint> 	checkpoints; // List of all nodes (crossroads/road connections) on the map
+	private static World 					instance = null;
+	private Vector<Checkpoint> 				checkpoints; // List of all nodes (crossroads/road connections) on the map
 	private double 							timestep; // Amount of time between two system updates
 
-	public static Map getInstance() {
+	public static World getInstance() {
 		if (instance == null)
-			instance = new Map();
+			instance = new World();
 		return instance;
 	}
 
-	private Map() {
-		setEND_SIMULATION(false);
+	private World() {
 		checkpoints = new Vector<>();
 		timestep = 1.0 / 60; // 1 second
 		createGraph();
 	};
 
+	/**
+	 * World simulates real world, running in background, allowing user to ask queries in real time
+	 */
 	@Override
 	public void run() {
 		// System.out.println(Map.getInstance().toString());
 		long startTime = System.currentTimeMillis();
 		// int numCars;
-		while (!isEND_SIMULATION()) {
+		while (true) {
 			long endTime = System.currentTimeMillis();
 			if (endTime - startTime > 1000) {
 				startTime = endTime;
-				Map.getInstance().updateState();
+				World.getInstance().updateState();
 				/*
 				 * numCars = 0; for(Checkpoint c :
 				 * Map.getInstance().checkpoints){ for(Road r : c.getRoads()){
@@ -44,11 +48,12 @@ public class Map implements Runnable {
 			}
 		}
 	}
-
+	/**
+	 * Method responsible for generating graph representing roads and crossroads (checkpoints)
+	 */
 	private void createGraph() {
 
 		int roadCounter = 0;
-		Random rand = new Random();
 
 		// Add nodes
 		for (int i = 0; i < 15; i++) {
@@ -102,17 +107,6 @@ public class Map implements Runnable {
 		return res.toString();
 	}
 
-	// private void startClock() {
-	// long startTime = System.currentTimeMillis();
-	// while(true){
-	// long endTime = System.currentTimeMillis();
-	// if(endTime - startTime > 1000){
-	// startTime = endTime;
-	// updateState();
-	// }
-	// }
-	// }
-
 	private void updateState() {
 		for (Checkpoint c : checkpoints) {
 			c.updateState();
@@ -123,16 +117,8 @@ public class Map implements Runnable {
 		return timestep;
 	}
 
-	private boolean isEND_SIMULATION() {
-		return END_SIMULATION;
-	}
-	
-	private void setEND_SIMULATION(boolean eND_SIMULATION) {
-		END_SIMULATION = eND_SIMULATION;
-	}
-
 	public static void main(String[] args) {
-		Thread t = new Thread( Map.getInstance() );
+		Thread t = new Thread( World.getInstance() );
 		t.start();
 		new GraphicalUserInterface();
 	}

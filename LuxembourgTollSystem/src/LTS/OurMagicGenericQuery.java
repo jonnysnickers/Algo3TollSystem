@@ -13,14 +13,15 @@ public class OurMagicGenericQuery {
 	/**
 	 * 
 	 * @param query
-	 *          - Query in form SELECT(conditions)[GROUP(field)][COMMAND]. Things
-	 *          in [] are optional. COMMAND is one from
-	 *          MIN(field)/MAX(field)/COUNT/SUM. "field" is one from
-	 *          road/gold/plate/enterDate/exitDate. conditions is string in form
-	 *          "field(<>=)value[&field(<>=)value...]". Value for date is in form
-	 *          "yyyy-MM-dd'T'HH:mm:ss" for example "2000-10-10T10:10:10". Plates
-	 *          are compared lexicographically. For Road there is only = operator
-	 *          (typing < or > is considered as =).
+	 *            - Query in form SELECT(conditions)[GROUP(field)][COMMAND].
+	 *            Things in [] are optional. COMMAND is one from
+	 *            MIN(field)/MAX(field)/COUNT/SUM. "field" is one from
+	 *            road/gold/plate/enterDate/exitDate. conditions is string in
+	 *            form "field(<>=)value[&field(<>=)value...]". Value for date is
+	 *            in form "yyyy-MM-dd'T'HH:mm:ss" for example
+	 *            "2000-10-10T10:10:10". Plates are compared lexicographically.
+	 *            For Road there is only = operator (typing < or > is considered
+	 *            as =).
 	 * @return String that is answer to given query.
 	 * @throws ParseException
 	 */
@@ -31,7 +32,9 @@ public class OurMagicGenericQuery {
 		String con = query.substring(7, j);
 		Set<Toll> afterSelect = select(con);
 
-		/** Handling GROUP(field) part, setting NoGrouping if no GROUP or GROUP() **/
+		/**
+		 * Handling GROUP(field) part, setting NoGrouping if no GROUP or GROUP()
+		 **/
 		Map<String, Set<Toll>> afterGroup = null;
 
 		if (query.contains("GROUP(plate)")) {
@@ -83,7 +86,7 @@ public class OurMagicGenericQuery {
 	 * Roads.
 	 * 
 	 * @param source
-	 *          - Set of Tolls to be grouped.
+	 *            - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Roads.
 	 */
 	public Map<String, Set<Toll>> groupByRoad(Set<Toll> source) {
@@ -91,7 +94,8 @@ public class OurMagicGenericQuery {
 
 		for (Toll toll : source) {
 			if (res.containsKey(((Integer) toll.getRoad().getId()).toString())) {
-				res.get(((Integer) toll.getRoad().getId()).toString()).add(toll);
+				res.get(((Integer) toll.getRoad().getId()).toString())
+						.add(toll);
 			} else {
 				Set<Toll> tmp = new HashSet<Toll>();
 				tmp.add(toll);
@@ -106,7 +110,7 @@ public class OurMagicGenericQuery {
 	 * Plates.
 	 * 
 	 * @param source
-	 *          - Set of Tolls to be grouped.
+	 *            - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Plates.
 	 */
 	public Map<String, Set<Toll>> groupByPlate(Set<Toll> source) {
@@ -129,7 +133,7 @@ public class OurMagicGenericQuery {
 	 * Gold.
 	 * 
 	 * @param source
-	 *          - Set of Tolls to be grouped.
+	 *            - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Gold.
 	 */
 	public Map<String, Set<Toll>> groupByGold(Set<Toll> source) {
@@ -152,7 +156,7 @@ public class OurMagicGenericQuery {
 	 * EnterDates.
 	 * 
 	 * @param source
-	 *          - Set of Tolls to be grouped.
+	 *            - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by EnterDates.
 	 */
 	public Map<String, Set<Toll>> groupByEnterDate(Set<Toll> source) {
@@ -175,7 +179,7 @@ public class OurMagicGenericQuery {
 	 * ExitDates.
 	 * 
 	 * @param source
-	 *          - Set of Tolls to be grouped.
+	 *            - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by ExitDates.
 	 */
 	public Map<String, Set<Toll>> groupByExitDate(Set<Toll> source) {
@@ -197,9 +201,9 @@ public class OurMagicGenericQuery {
 	 * This function is responsible for summing gold in sets of Tolls.
 	 * 
 	 * @param source
-	 *          - Sets of Tolls grouped by some criteria.
-	 * @return String containing 'names' by witch sets are grouped followed by sum
-	 *         of gold in corresponding sets.
+	 *            - Sets of Tolls grouped by some criteria.
+	 * @return String containing 'names' by witch sets are grouped followed by
+	 *         sum of gold in corresponding sets.
 	 */
 	public String OMGSum(Map<String, Set<Toll>> source) {
 		StringBuilder sb = new StringBuilder("");
@@ -219,7 +223,7 @@ public class OurMagicGenericQuery {
 	 * This function is responsible for counting entries in sets of Tolls.
 	 * 
 	 * @param source
-	 *          - Sets of Tolls grouped by some criteria.
+	 *            - Sets of Tolls grouped by some criteria.
 	 * @return String containing 'names' by witch sets are grouped followed by
 	 *         number of record in corresponding sets.
 	 */
@@ -243,15 +247,16 @@ public class OurMagicGenericQuery {
 	 * of Tolls.
 	 * 
 	 * @param source
-	 *          - Sets of Tolls grouped by some criteria.
+	 *            - Sets of Tolls grouped by some criteria.
 	 * @param field
-	 *          - name of field in which we search for minimum.
+	 *            - name of field in which we search for minimum.
 	 * @return String containing 'names' by witch sets are grouped followed by
 	 *         minimum field in corresponding sets. Query for minimum plate and
 	 *         road makes no sense.
 	 * @throws ParseException
 	 */
-	public String OMGMin(Map<String, Set<Toll>> source, String field) throws ParseException {
+	public String OMGMin(Map<String, Set<Toll>> source, String field)
+			throws ParseException {
 		StringBuilder sb = new StringBuilder("");
 		if (field.equals("plate")) {
 			return "This query makes no sense!\n";
@@ -275,7 +280,8 @@ public class OurMagicGenericQuery {
 		}
 		if (field.equals("enterDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
-				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2100-12-10T10:10:10");
+				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+						.parse("2100-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
 				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
@@ -289,7 +295,8 @@ public class OurMagicGenericQuery {
 		}
 		if (field.equals("exitDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
-				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2100-12-10T10:10:10");
+				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+						.parse("2100-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
 				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
@@ -309,15 +316,16 @@ public class OurMagicGenericQuery {
 	 * of Tolls.
 	 * 
 	 * @param source
-	 *          - Sets of Tolls grouped by some criteria.
+	 *            - Sets of Tolls grouped by some criteria.
 	 * @param field
-	 *          - name of field in which we search for maximum.
+	 *            - name of field in which we search for maximum.
 	 * @return String containing 'names' by witch sets are grouped followed by
 	 *         maximum field in corresponding sets. Query for minimum plate and
 	 *         road makes no sense.
 	 * @throws ParseException
 	 */
-	public String OMGMax(Map<String, Set<Toll>> source, String field) throws ParseException {
+	public String OMGMax(Map<String, Set<Toll>> source, String field)
+			throws ParseException {
 		StringBuilder sb = new StringBuilder("");
 		if (field.equals("plate")) {
 			return "This query makes no sense!\n";
@@ -341,7 +349,8 @@ public class OurMagicGenericQuery {
 		}
 		if (field.equals("enterDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
-				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2000-12-10T10:10:10");
+				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+						.parse("2000-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
 				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
@@ -355,7 +364,8 @@ public class OurMagicGenericQuery {
 		}
 		if (field.equals("exitDate")) {
 			for (Map.Entry<String, Set<Toll>> entry : source.entrySet()) {
-				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2000-12-10T10:10:10");
+				Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+						.parse("2000-12-10T10:10:10");
 				Set<Toll> tollset = entry.getValue();
 				sb.append(entry.getKey() + ": ");
 				for (Toll toll : tollset) {
@@ -371,12 +381,12 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for selecting toll that satisfy given criteria
-	 * from all Tolls stored in DataBase.finished.
+	 * This function is responsible for selecting toll that satisfy given
+	 * criteria from all Tolls stored in DataBase.finished.
 	 * 
 	 * @param con
-	 *          - criteria of search in form "field(<>=)value". Connected by & if
-	 *          more than one.
+	 *            - criteria of search in form "field(<>=)value". Connected by &
+	 *            if more than one.
 	 * @return Set<Toll>result - set of Tolls satisfying con.
 	 * @throws ParseException
 	 */
@@ -410,28 +420,34 @@ public class OurMagicGenericQuery {
 					continue;
 
 				if (tmp[0].equals("road")) {
-					if (!tmp[1].equals(((Integer) toll.getRoad().getId()).toString())) {
+					if (!tmp[1].equals(((Integer) toll.getRoad().getId())
+							.toString())) {
 						pass = false;
 					}
 				} else if (tmp[0].equals("gold")) {
 					try {
-						if (operation == '>' && toll.getGold() < Double.parseDouble(tmp[1])) {
+						if (operation == '>'
+								&& toll.getGold() < Double.parseDouble(tmp[1])) {
 							pass = false;
 						}
-						if (operation == '<' && toll.getGold() > Double.parseDouble(tmp[1])) {
+						if (operation == '<'
+								&& toll.getGold() > Double.parseDouble(tmp[1])) {
 							pass = false;
 						}
-						if (operation == '=' && toll.getGold() != Double.parseDouble(tmp[1])) {
+						if (operation == '='
+								&& toll.getGold() != Double.parseDouble(tmp[1])) {
 							pass = false;
 						}
 					} catch (Exception e) {
 						// DoNothing
 					}
 				} else if (tmp[0].equals("plate")) {
-					if (operation == '>' && (toll.getPlate().compareTo(tmp[1]) < 0)) {
+					if (operation == '>'
+							&& (toll.getPlate().compareTo(tmp[1]) < 0)) {
 						pass = false;
 					}
-					if (operation == '<' && (toll.getPlate().compareTo(tmp[1]) > 0)) {
+					if (operation == '<'
+							&& (toll.getPlate().compareTo(tmp[1]) > 0)) {
 						pass = false;
 					}
 					if (operation == '=' && !toll.getPlate().equals(tmp[1])) {
@@ -440,15 +456,21 @@ public class OurMagicGenericQuery {
 				} else if (tmp[0].equals("enterDate")) {
 					try {
 						if (operation == '>'
-								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) > 0)) {
+								&& (new SimpleDateFormat(
+										"yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1])
+										.compareTo(toll.getEnterDate()) > 0)) {
 							pass = false;
 						}
 						if (operation == '<'
-								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) < 0)) {
+								&& (new SimpleDateFormat(
+										"yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1])
+										.compareTo(toll.getEnterDate()) < 0)) {
 							pass = false;
 						}
 						if (operation == '='
-								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) != 0)) {
+								&& (new SimpleDateFormat(
+										"yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1])
+										.compareTo(toll.getEnterDate()) != 0)) {
 							pass = false;
 						}
 					} catch (ParseException e) {
@@ -457,15 +479,21 @@ public class OurMagicGenericQuery {
 				} else if (tmp[0].equals("exitDate")) {
 					try {
 						if (operation == '>'
-								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) > 0)) {
+								&& (new SimpleDateFormat(
+										"yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1])
+										.compareTo(toll.getExitDate()) > 0)) {
 							pass = false;
 						}
 						if (operation == '<'
-								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) < 0)) {
+								&& (new SimpleDateFormat(
+										"yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1])
+										.compareTo(toll.getExitDate()) < 0)) {
 							pass = false;
 						}
 						if (operation == '='
-								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) != 0)) {
+								&& (new SimpleDateFormat(
+										"yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1])
+										.compareTo(toll.getExitDate()) != 0)) {
 							pass = false;
 						}
 					} catch (ParseException e) {

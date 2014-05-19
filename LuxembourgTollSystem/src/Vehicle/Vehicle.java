@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Map.Checkpoint;
-import Map.Map;
+import Map.World;
 import Map.Road;
 
 public class Vehicle {
 
-	private Road 			onRoad;
-	private int 			maxSpeed;
-	private double  	distanceOnRoad;
-	private int				currentSpeed;
-	private String 		plate;
+	private Road 			onRoad; //Road which vehicle is currently using
+	private int 			maxSpeed; //Maximum possible speed of vehicle
+	private double  	distanceOnRoad; //Distance traveled by vehicle on road to which it belongs (onRoad)
+	private int				currentSpeed; //Current speed of vehicle
+	private String 		plate; //Vehicle plate
 	private Random		rand;
 	
 	public Vehicle(Road onRoad) {
@@ -30,16 +30,35 @@ public class Vehicle {
 		this.plate = plate;
 	}
 	
+	/**
+	 * Generates random string of given length
+	 * @param len - length of string
+	 * @return
+	 */
+	public static String getRandomString(int len){
+		StringBuilder string = new StringBuilder();
+		Random rand = new Random();
+		
+		char letter;
+		for(int i=0; i<len; i++){
+			letter = (char)( (int)'A' + rand.nextInt(26) );
+			string.append(letter);
+		}
+		
+		return string.toString();
+	}
+
 	public String toString(){
 		return plate;
 	}
 	
 	/**
 	 * Function activated every time when global state is updated
+	 * Updates distanceOnRoad and current speed
 	 */
 	public void move(){
 		System.out.println(plate + " " + onRoad.getStart().getId() + "->" + onRoad.getEnd().getId() + " " + distanceOnRoad + "/" + onRoad.getLength() + (onRoad.isMonitored()? "!!!" : "") );
-		distanceOnRoad += currentSpeed * Map.getInstance().getTimeStep();
+		distanceOnRoad += currentSpeed * World.getInstance().getTimeStep();
 		currentSpeed = currentSpeed + rand.nextInt(7)-3;
 		if(currentSpeed < 0) currentSpeed = 0;
 		if(currentSpeed > maxSpeed || currentSpeed > onRoad.getSpeedLimit()) currentSpeed = Math.min(maxSpeed,onRoad.getSpeedLimit());
@@ -50,6 +69,7 @@ public class Vehicle {
 
 	/**
 	 * Method chooses new road for vehicle when vehicle reaches end of the road
+	 * It automatically removes vehicle from previous road and adds it to next road
 	 */
 	void chooseNewRoad(){
 		distanceOnRoad -= onRoad.getLength();
@@ -108,22 +128,5 @@ public class Vehicle {
 		this.distanceOnRoad = distanceOnRoad;
 	}
 	
-	/**
-	 * Generates random string of given length
-	 * @param len - length of string
-	 * @return
-	 */
-	public static String getRandomString(int len){
-		StringBuilder string = new StringBuilder();
-		Random rand = new Random();
-		
-		char letter;
-		for(int i=0; i<len; i++){
-			letter = (char)( (int)'A' + rand.nextInt(26) );
-			string.append(letter);
-		}
-		
-		return string.toString();
-	}
 
 }

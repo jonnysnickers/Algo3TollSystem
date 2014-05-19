@@ -28,7 +28,7 @@ public class Toll {
 
 	@Override
 	public String toString() {
-		return road.getId() + " " + Math.round(gold * 100) / 100.0 + " " + plate + " " + enterDate + " " + exitDate + "\n";
+		return road.getId() + "\t" + Math.round(gold * 100) / 100.0 + "\t" + plate + "\t" + enterDate + "\t" + exitDate + "\n";
 	}
 
 	public void setExitDate(Date date) {

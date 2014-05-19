@@ -10,11 +10,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class GraphicalUserInterface extends JFrame implements ActionListener {
 
 	JTextField enterquery;
 	JTextArea output;
-
+	static final String helpMessage = "Valid query is in form:\nSELECT(conditions)[GROUP(field)][command]\nwhere:\nfield is one from 'road/plate/gold/enterDate/exitDate'\ncommand is one from 'SUM/COUNT/MAX(field)/MIN(field)'\nconditions is string of restrictions connected by &. Each restriction is in form 'field(<>=)value'. Date format is 'yyyy-mm-ddTHH:mm:ss'\nParameters in [] are optional.\nExample query:\nSELECT()GROUP(plate)SUM\n";
 	public GraphicalUserInterface() {
 		// Window
 		setSize(820, 620);
@@ -35,7 +36,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener {
 		add(aaa);
 
 		// TextField for query
-		enterquery = new JTextField("SELECT()");
+		enterquery = new JTextField("HELP");
 		enterquery.setBounds(40, 0, 770, 30);
 		add(enterquery);
 
@@ -56,8 +57,13 @@ public class GraphicalUserInterface extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			String res = new OurMagicGenericQuery().doQuery(enterquery.getText());
-			output.setText(res);
+			String tmp = enterquery.getText();
+			if (tmp.equals("HELP")) {
+				output.setText(helpMessage);
+			} else {
+				String res = new OurMagicGenericQuery().doQuery(tmp);
+				output.setText(res);
+			}
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}

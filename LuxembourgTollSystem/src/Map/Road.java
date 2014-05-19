@@ -6,16 +6,20 @@ import java.util.Random;
 import LTS.DataBase;
 import Vehicle.Vehicle;
 
+/**
+ * 
+ *	All roads ore one-directional
+ */
 public class Road {
 
-	private int 								id;
-	private double 							cost;
-	private boolean							monitored;
-	private Checkpoint 					start;
-	private Checkpoint 					end;
-	private double 							length;
-	private ArrayList <Vehicle>	vehicles;
-	private int									speedlimit;
+	private int 								id; //Road ID
+	private double 							cost;	//Fee for using this road
+	private boolean							monitored; //Variable determining if this road is monitored by toll-system
+	private Checkpoint 					start; //Starting node for road
+	private Checkpoint 					end; //Ending node for road
+	private double 							length; //Length of road
+	private ArrayList <Vehicle>	vehicles;	//ArrayList containing all vehicles currently using this road
+	private int									speedlimit; //Speed limit on this road
 	
 	
 	public Road(int id, Checkpoint start, Checkpoint end){
@@ -45,9 +49,14 @@ public class Road {
 		return res.toString();
 	}
 	
+	/**
+	 * Method responsible for updating road state by moving all vehicles it contains
+	 */
 	public void update(){
 		for(int i=0; i<vehicles.size();i++){
+			int size = vehicles.size();
 			vehicles.get(i).move();
+			if(vehicles.size() != size) i--;
 		}
 	}
 	
@@ -75,6 +84,10 @@ public class Road {
 		return this.length;
 	}
 	
+	/**
+	 *  Method adds new vehicle to road
+	 * @param vehicle - vehicle entering road
+	 */
 	public void addVehicle(Vehicle vehicle){
 		this.vehicles.add(vehicle);
 		if(isMonitored()){
@@ -83,6 +96,10 @@ public class Road {
 		}
 	}
 	
+	/**
+	 * Method removing vehicle from road
+	 * @param vehicle - vehicle leaving road
+	 */
 	public void removeVehicle(Vehicle vehicle){
 		this.vehicles.remove(vehicle);
 		if(isMonitored()){

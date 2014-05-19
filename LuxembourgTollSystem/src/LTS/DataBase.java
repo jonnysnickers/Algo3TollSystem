@@ -20,10 +20,10 @@ public class DataBase {
 	 * synchronize access to resources.
 	 */
 	private final Lock 			lock = new ReentrantLock();
-	private static DataBase instance = null;
+	private static DataBase 	instance = null;
 	Map<String, Toll> 			unfinished;
-	Set<Toll> 							finished;
-
+	Set<Toll> 					finished;
+	
 	private DataBase() {
 		unfinished = new HashMap<String, Toll>();
 		finished = new HashSet<Toll>();
