@@ -9,10 +9,10 @@ import Map.Road;
 
 public class Vehicle {
 
-	private Road 		onRoad;
-	private int 		maxSpeed;
+	private Road 			onRoad;
+	private int 			maxSpeed;
 	private double  	distanceOnRoad;
-	private int			currentSpeed;
+	private int				currentSpeed;
 	private String 		plate;
 	private Random		rand;
 	

@@ -7,10 +7,10 @@ import Vehicle.Vehicle;
 
 public class Checkpoint {
 	
-	private int 				id;
-	private boolean				endNode;
+	private int 						id;
+	private boolean					endNode;
 	private Coordinates 		coordinates;
-	private ArrayList<Road> 	exitRoadsList;
+	private ArrayList<Road> exitRoadsList;
 	/**
 	 * 
 	 * @param id - node ID

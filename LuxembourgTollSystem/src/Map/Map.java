@@ -7,12 +7,10 @@ import LTS.GraphicalUserInterface;
 
 public class Map implements Runnable {
 
-	private static Map instance = null;
-	private boolean END_SIMULATION;
-	private Vector<Checkpoint> checkpoints; // List of all nodes
-											// (crossroads/road connections) on
-											// the map
-	private double timestep; // Amount of time between two system updates
+	private static Map 					instance = null;
+	private boolean 						END_SIMULATION;
+	private Vector<Checkpoint> 	checkpoints; // List of all nodes (crossroads/road connections) on the map
+	private double 							timestep; // Amount of time between two system updates
 
 	public static Map getInstance() {
 		if (instance == null)

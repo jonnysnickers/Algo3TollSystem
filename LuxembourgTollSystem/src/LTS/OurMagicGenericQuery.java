@@ -9,16 +9,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class OurMagicGenericQuery {
-	
+
 	/**
 	 * 
-	 * @param query - Query in form SELECT(conditions)[GROUP(field)][COMMAND].
-	 * Things in [] are optional. COMMAND is one from MIN(field)/MAX(field)/COUNT/SUM.
-	 * "field" is one from road/gold/plate/enterDate/exitDate.
-	 * conditions is string in form "field(<>=)value[&field(<>=)value...]".
-	 * Value for date is in form "yyyy-MM-dd'T'HH:mm:ss" for example "2000-10-10T10:10:10".
-	 * Plates are compared lexicographically.
-	 * For Road there is only = operator (typing < or > is considered as =).
+	 * @param query
+	 *          - Query in form SELECT(conditions)[GROUP(field)][COMMAND]. Things
+	 *          in [] are optional. COMMAND is one from
+	 *          MIN(field)/MAX(field)/COUNT/SUM. "field" is one from
+	 *          road/gold/plate/enterDate/exitDate. conditions is string in form
+	 *          "field(<>=)value[&field(<>=)value...]". Value for date is in form
+	 *          "yyyy-MM-dd'T'HH:mm:ss" for example "2000-10-10T10:10:10". Plates
+	 *          are compared lexicographically. For Road there is only = operator
+	 *          (typing < or > is considered as =).
 	 * @return String that is answer to given query.
 	 * @throws ParseException
 	 */
@@ -75,10 +77,13 @@ public class OurMagicGenericQuery {
 			return sb.toString();
 		}
 	}
-	
+
 	/**
-	 * This function is responsible for grouping Set of Tolls into Subsets by Roads.
-	 * @param source - Set of Tolls to be grouped.
+	 * This function is responsible for grouping Set of Tolls into Subsets by
+	 * Roads.
+	 * 
+	 * @param source
+	 *          - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Roads.
 	 */
 	public Map<String, Set<Toll>> groupByRoad(Set<Toll> source) {
@@ -97,8 +102,11 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for grouping Set of Tolls into Subsets by Plates.
-	 * @param source - Set of Tolls to be grouped.
+	 * This function is responsible for grouping Set of Tolls into Subsets by
+	 * Plates.
+	 * 
+	 * @param source
+	 *          - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Plates.
 	 */
 	public Map<String, Set<Toll>> groupByPlate(Set<Toll> source) {
@@ -117,8 +125,11 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for grouping Set of Tolls into Subsets by Gold.
-	 * @param source - Set of Tolls to be grouped.
+	 * This function is responsible for grouping Set of Tolls into Subsets by
+	 * Gold.
+	 * 
+	 * @param source
+	 *          - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by Gold.
 	 */
 	public Map<String, Set<Toll>> groupByGold(Set<Toll> source) {
@@ -137,8 +148,11 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for grouping Set of Tolls into Subsets by EnterDates.
-	 * @param source - Set of Tolls to be grouped.
+	 * This function is responsible for grouping Set of Tolls into Subsets by
+	 * EnterDates.
+	 * 
+	 * @param source
+	 *          - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by EnterDates.
 	 */
 	public Map<String, Set<Toll>> groupByEnterDate(Set<Toll> source) {
@@ -157,8 +171,11 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for grouping Set of Tolls into Subsets by ExitDates.
-	 * @param source - Set of Tolls to be grouped.
+	 * This function is responsible for grouping Set of Tolls into Subsets by
+	 * ExitDates.
+	 * 
+	 * @param source
+	 *          - Set of Tolls to be grouped.
 	 * @return Map<String,Set<Toll>>res - Sets of Tolls grouped by ExitDates.
 	 */
 	public Map<String, Set<Toll>> groupByExitDate(Set<Toll> source) {
@@ -178,8 +195,11 @@ public class OurMagicGenericQuery {
 
 	/**
 	 * This function is responsible for summing gold in sets of Tolls.
-	 * @param source - Sets of Tolls grouped by some criteria.
-	 * @return String containing 'names' by witch sets are grouped followed by sum of gold in corresponding sets.
+	 * 
+	 * @param source
+	 *          - Sets of Tolls grouped by some criteria.
+	 * @return String containing 'names' by witch sets are grouped followed by sum
+	 *         of gold in corresponding sets.
 	 */
 	public String OMGSum(Map<String, Set<Toll>> source) {
 		StringBuilder sb = new StringBuilder("");
@@ -190,15 +210,18 @@ public class OurMagicGenericQuery {
 			for (Toll toll : tollset) {
 				sum += toll.getGold();
 			}
-			sb.append(Math.round(sum*100)/100.0 + "\n");
+			sb.append(Math.round(sum * 100) / 100.0 + "\n");
 		}
 		return sb.toString();
 	}
 
 	/**
 	 * This function is responsible for counting entries in sets of Tolls.
-	 * @param source - Sets of Tolls grouped by some criteria.
-	 * @return String containing 'names' by witch sets are grouped followed by number of record in corresponding sets.
+	 * 
+	 * @param source
+	 *          - Sets of Tolls grouped by some criteria.
+	 * @return String containing 'names' by witch sets are grouped followed by
+	 *         number of record in corresponding sets.
 	 */
 	public String OMGCount(Map<String, Set<Toll>> source) {
 		StringBuilder sb = new StringBuilder("");
@@ -206,7 +229,8 @@ public class OurMagicGenericQuery {
 			int counter = 0;
 			Set<Toll> tollset = entry.getValue();
 			sb.append(entry.getKey() + ": ");
-			for (@SuppressWarnings("unused") Toll toll : tollset) {
+			for (@SuppressWarnings("unused")
+			Toll toll : tollset) {
 				counter++;
 			}
 			sb.append(counter + "\n");
@@ -215,10 +239,16 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for selecting minimum of given field in sets of Tolls.
-	 * @param source - Sets of Tolls grouped by some criteria.
-	 * @param field - name of field in which we search for minimum.
-	 * @return String containing 'names' by witch sets are grouped followed by minimum field in corresponding sets. Query for minimum plate and road makes no sense.
+	 * This function is responsible for selecting minimum of given field in sets
+	 * of Tolls.
+	 * 
+	 * @param source
+	 *          - Sets of Tolls grouped by some criteria.
+	 * @param field
+	 *          - name of field in which we search for minimum.
+	 * @return String containing 'names' by witch sets are grouped followed by
+	 *         minimum field in corresponding sets. Query for minimum plate and
+	 *         road makes no sense.
 	 * @throws ParseException
 	 */
 	public String OMGMin(Map<String, Set<Toll>> source, String field) throws ParseException {
@@ -236,7 +266,7 @@ public class OurMagicGenericQuery {
 						res = toll.getGold();
 					}
 				}
-				sb.append(Math.round(res*100)/100.0 + "\n");
+				sb.append(Math.round(res * 100) / 100.0 + "\n");
 			}
 			return sb.toString();
 		}
@@ -275,10 +305,16 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for selecting maximum of given field in sets of Tolls.
-	 * @param source - Sets of Tolls grouped by some criteria.
-	 * @param field - name of field in which we search for maximum.
-	 * @return String containing 'names' by witch sets are grouped followed by maximum field in corresponding sets. Query for minimum plate and road makes no sense.
+	 * This function is responsible for selecting maximum of given field in sets
+	 * of Tolls.
+	 * 
+	 * @param source
+	 *          - Sets of Tolls grouped by some criteria.
+	 * @param field
+	 *          - name of field in which we search for maximum.
+	 * @return String containing 'names' by witch sets are grouped followed by
+	 *         maximum field in corresponding sets. Query for minimum plate and
+	 *         road makes no sense.
 	 * @throws ParseException
 	 */
 	public String OMGMax(Map<String, Set<Toll>> source, String field) throws ParseException {
@@ -296,7 +332,7 @@ public class OurMagicGenericQuery {
 						res = toll.getGold();
 					}
 				}
-				sb.append(Math.round(res*100)/100.0 + "\n");
+				sb.append(Math.round(res * 100) / 100.0 + "\n");
 			}
 			return sb.toString();
 		}
@@ -335,17 +371,22 @@ public class OurMagicGenericQuery {
 	}
 
 	/**
-	 * This function is responsible for selecting toll that satisfy given criteria from all Tolls stored in DataBase.finished.
-	 * @param con - criteria of search in form "field(<>=)value". Connected by & if more than one.
+	 * This function is responsible for selecting toll that satisfy given criteria
+	 * from all Tolls stored in DataBase.finished.
+	 * 
+	 * @param con
+	 *          - criteria of search in form "field(<>=)value". Connected by & if
+	 *          more than one.
 	 * @return Set<Toll>result - set of Tolls satisfying con.
 	 * @throws ParseException
 	 */
-	public Set<Toll> select(String con) throws ParseException {
+	public Set<Toll> select(String con) {
 
 		String[] conditions = con.split("&");
 
 		Set<Toll> result = new HashSet<Toll>();
 
+		DataBase.getInstance().lockDataBase();
 		for (Toll toll : DataBase.getInstance().finished) {
 
 			Boolean pass = true;
@@ -364,22 +405,27 @@ public class OurMagicGenericQuery {
 					operation = '<';
 					tmp = condition.split("<");
 				}
-				
-				if(tmp.length != 2)continue;
-				
+
+				if (tmp.length != 2)
+					continue;
+
 				if (tmp[0].equals("road")) {
 					if (!tmp[1].equals(((Integer) toll.getRoad().getId()).toString())) {
 						pass = false;
 					}
 				} else if (tmp[0].equals("gold")) {
-					if (operation == '>' && toll.getGold() < Double.parseDouble(tmp[1])) {
-						pass = false;
-					}
-					if (operation == '<' && toll.getGold() > Double.parseDouble(tmp[1])) {
-						pass = false;
-					}
-					if (operation == '=' && toll.getGold() != Double.parseDouble(tmp[1])) {
-						pass = false;
+					try {
+						if (operation == '>' && toll.getGold() < Double.parseDouble(tmp[1])) {
+							pass = false;
+						}
+						if (operation == '<' && toll.getGold() > Double.parseDouble(tmp[1])) {
+							pass = false;
+						}
+						if (operation == '=' && toll.getGold() != Double.parseDouble(tmp[1])) {
+							pass = false;
+						}
+					} catch (Exception e) {
+						// DoNothing
 					}
 				} else if (tmp[0].equals("plate")) {
 					if (operation == '>' && (toll.getPlate().compareTo(tmp[1]) < 0)) {
@@ -392,30 +438,38 @@ public class OurMagicGenericQuery {
 						pass = false;
 					}
 				} else if (tmp[0].equals("enterDate")) {
-					if (operation == '>'
-							&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) > 0)) {
-						pass = false;
-					}
-					if (operation == '<'
-							&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) < 0)) {
-						pass = false;
-					}
-					if (operation == '='
-							&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) != 0)) {
-						pass = false;
+					try {
+						if (operation == '>'
+								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) > 0)) {
+							pass = false;
+						}
+						if (operation == '<'
+								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) < 0)) {
+							pass = false;
+						}
+						if (operation == '='
+								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getEnterDate()) != 0)) {
+							pass = false;
+						}
+					} catch (ParseException e) {
+						// DoNothing
 					}
 				} else if (tmp[0].equals("exitDate")) {
-					if (operation == '>'
-							&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) > 0)) {
-						pass = false;
-					}
-					if (operation == '<'
-							&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) < 0)) {
-						pass = false;
-					}
-					if (operation == '='
-							&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) != 0)) {
-						pass = false;
+					try {
+						if (operation == '>'
+								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) > 0)) {
+							pass = false;
+						}
+						if (operation == '<'
+								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) < 0)) {
+							pass = false;
+						}
+						if (operation == '='
+								&& (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(tmp[1]).compareTo(toll.getExitDate()) != 0)) {
+							pass = false;
+						}
+					} catch (ParseException e) {
+						// DoNothing
 					}
 				}
 			}
@@ -424,6 +478,7 @@ public class OurMagicGenericQuery {
 				result.add(toll);
 			}
 		}
+		DataBase.getInstance().unlockDataBase();
 		return result;
 	}
 

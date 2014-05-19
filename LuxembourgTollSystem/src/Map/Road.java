@@ -8,14 +8,14 @@ import Vehicle.Vehicle;
 
 public class Road {
 
-	private int 					id;
-	private double 					cost;
-	private boolean					monitored;
-	private Checkpoint 				start;
-	private Checkpoint 				end;
-	private double 					length;
-	private ArrayList <Vehicle>	 	vehicles;
-	private int						speedlimit;
+	private int 								id;
+	private double 							cost;
+	private boolean							monitored;
+	private Checkpoint 					start;
+	private Checkpoint 					end;
+	private double 							length;
+	private ArrayList <Vehicle>	vehicles;
+	private int									speedlimit;
 	
 	
 	public Road(int id, Checkpoint start, Checkpoint end){

@@ -6,10 +6,10 @@ public class RandomHumanQuryGenerator {
 
 	static Random rand = new Random();
 	
-	static String[] fields 	= {"gold", "road", "plate", "enterDate", "exitDate"};
-	static String[] operator = {"=", ">", "<"};
-	static String[] grouping = {"","GROUP()","GROUP(gold)","GROUP(road)","GROUP(plate)","GROUP(enterDate)","GROUP(exitDate)"};
-	static String[] command = {"","SUM","COUNT","MIN(gold)","MAX(gold)","MIN(road)","MAX(road)","MIN(plate)","MAX(plate)","MIN(enterDate)","MAX(enterDate)","MIN(exitDate)","MAX(exitDate)"};
+	static String[] fields 	= 	{"gold", "road", "plate", "enterDate", "exitDate"};
+	static String[] operator =	{"=", ">", "<"};
+	static String[] grouping = 	{"","GROUP()","GROUP(gold)","GROUP(road)","GROUP(plate)","GROUP(enterDate)","GROUP(exitDate)"};
+	static String[] command = 	{"","SUM","COUNT","MIN(gold)","MAX(gold)","MIN(road)","MAX(road)","MIN(plate)","MAX(plate)","MIN(enterDate)","MAX(enterDate)","MIN(exitDate)","MAX(exitDate)"};
 	
 	public static String getRandomQuery(){
 		StringBuilder query = new StringBuilder("SELECT(");
